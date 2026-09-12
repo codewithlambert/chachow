@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import TopNav from '../components/TopNav.jsx';
+import Sidebar from '../components/Sidebar.jsx';
 import './DishDetail.css';
 
 import heroBowl from '../assets/images/hero-bowl.jpg';
@@ -78,10 +78,11 @@ export default function DishDetail() {
   return (
     <>
       {/* ---------------- DESKTOP ---------------- */}
-      <div className="only-desktop page-light">
-        <TopNav />
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '28px 40px 0' }}>
-          <Link to="/browse" style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-55)' }}>← Back to restaurants</Link>
+      <div className="only-desktop page-dark">
+        <Sidebar />
+        <div className="with-sidebar">
+        <div style={{ maxWidth: 1360, padding: '28px 40px 0' }}>
+          <Link to="/browse" style={{ fontSize: 13, fontWeight: 600, color: 'var(--off-55)' }}>← Back to restaurants</Link>
         </div>
 
         <div className="dish-desktop-body">
@@ -99,35 +100,35 @@ export default function DishDetail() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 700 }}>{dish.restaurant}</div>
-                <div style={{ fontSize: 12, color: 'var(--ink-45)' }}>★ {dish.rating} ({dish.reviews} reviews) · {dish.tags}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--offwhite)' }}>{dish.restaurant}</div>
+                <div style={{ fontSize: 12, color: 'var(--off-45)' }}>★ {dish.rating} ({dish.reviews} reviews) · {dish.tags}</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span className="badge-lime">Open</span>
-                <button aria-label="Save"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-45)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20s-7.5-4.6-9.8-9.1C.6 7.6 2.3 4 5.8 4c2 0 3.4 1 4.2 2.4C10.8 5 12.2 4 14.2 4c3.5 0 5.2 3.6 3.6 6.9C15.5 15.4 12 20 12 20z" /></svg></button>
+                <button aria-label="Save"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--off-45)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20s-7.5-4.6-9.8-9.1C.6 7.6 2.3 4 5.8 4c2 0 3.4 1 4.2 2.4C10.8 5 12.2 4 14.2 4c3.5 0 5.2 3.6 3.6 6.9C15.5 15.4 12 20 12 20z" /></svg></button>
               </div>
             </div>
 
-            <h1 style={{ fontSize: 26 }}>{dish.name}</h1>
-            <p style={{ fontSize: 14, color: 'var(--ink-55)', lineHeight: 1.55, maxWidth: 480 }}>
+            <h1 style={{ fontSize: 26, color: 'var(--offwhite)' }}>{dish.name}</h1>
+            <p style={{ fontSize: 14, color: 'var(--off-55)', lineHeight: 1.55, maxWidth: 480 }}>
               {dish.description}
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24 }}>{fmt(dish.price)}</span>
+              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: 'var(--offwhite)' }}>{fmt(dish.price)}</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <button onClick={() => setQty(Math.max(1, qty - 1))} style={stepperBtn}>−</button>
-                <span style={{ fontSize: 15, fontWeight: 700, width: 14, textAlign: 'center' }}>{qty}</span>
+                <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ ...stepperBtn, background: 'var(--off-08)', color: 'var(--offwhite)' }}>−</button>
+                <span style={{ fontSize: 15, fontWeight: 700, width: 14, textAlign: 'center', color: 'var(--offwhite)' }}>{qty}</span>
                 <button onClick={() => setQty(qty + 1)} style={{ ...stepperBtn, background: 'var(--lime)' }}>+</button>
               </div>
             </div>
 
             <div>
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
-                <h3 style={{ fontSize: 15 }}>Add-ons</h3>
-                <span style={{ fontSize: 12, color: 'var(--ink-45)' }}>Make it yours</span>
+                <h3 style={{ fontSize: 15, color: 'var(--offwhite)' }}>Add-ons</h3>
+                <span style={{ fontSize: 12, color: 'var(--off-45)' }}>Make it yours</span>
               </div>
-              <AddonsList addons={addons} toggle={toggle} />
+              <AddonsList addons={addons} toggle={toggle} dark />
             </div>
 
             <button className="btn btn-lime" style={{ width: '100%', height: 56, marginTop: 4 }} onClick={() => navigate('/cart')}>
@@ -136,20 +137,21 @@ export default function DishDetail() {
           </div>
 
           <div>
-            <h3 style={{ fontSize: 15, marginBottom: 6 }}>You might also like</h3>
+            <h3 style={{ fontSize: 15, marginBottom: 6, color: 'var(--offwhite)' }}>You might also like</h3>
             {RELATED.map((r) => (
               <div key={r.name} className="related-card">
                 <div style={{ width: 52, height: 52, borderRadius: 12, overflow: 'hidden', flexShrink: 0 }}>
                   <img src={r.img} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700 }}>{r.name}</div>
-                  <div style={{ fontSize: 12, color: 'var(--ink-45)' }}>{r.price}</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--offwhite)' }}>{r.name}</div>
+                  <div style={{ fontSize: 12, color: 'var(--off-45)' }}>{r.price}</div>
                 </div>
                 <button style={{ width: 26, height: 26, borderRadius: 'var(--r-pill)', background: 'var(--lime)', flexShrink: 0 }}>+</button>
               </div>
             ))}
           </div>
+        </div>
         </div>
       </div>
 

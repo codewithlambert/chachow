@@ -39,6 +39,7 @@
   --r-pill: 999px;
 
   --nav-h: 76px;
+  --sidebar-w: 240px;
   --bp-desktop: 1024px;
 
   color-scheme: light;
@@ -150,6 +151,8 @@ input { font-family: inherit; }
   border: 1px solid var(--card-dark-border);
 }
 
+.field::placeholder { color: var(--off-45); }
+
 .badge-lime {
   display: inline-flex;
   align-items: center;
@@ -163,15 +166,19 @@ input { font-family: inherit; }
 
 /* ---------- page shells ---------- */
 
-/* NOTE: min-height:100% resolves against the viewport on a position:fixed
-   element, silently turning it into a full-screen overlay. Never put this
-   class on a fixed element — set `background: var(--ink)` inline instead. */
+/* Percentage min-height doesn't reliably chain through html/body/#root
+   (unlike `height`, it doesn't give ancestors a definite height), so short
+   pages left the offwhite body peeking through below the dark content.
+   `vh` sidesteps the chain entirely. Never put this class on a
+   position:fixed element though — there, 100vh IS the viewport, so a fixed
+   element would still cover the full screen; use `background: var(--ink)`
+   inline instead for fixed elements. */
 .page-dark {
-  min-height: 100%;
+  min-height: 100vh;
   background: var(--ink);
 }
 .page-light {
-  min-height: 100%;
+  min-height: 100vh;
   background: var(--offwhite);
 }
 
@@ -182,4 +189,49 @@ input { font-family: inherit; }
 }
 @media (min-width: 1024px) {
   .container { padding: 0 40px; }
+}
+
+/* ---------- authenticated-app sidebar (desktop) ---------- */
+
+.app-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  z-index: 30;
+  overflow-y: auto;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--off-70);
+}
+.sidebar-link:hover { background: var(--off-05); color: var(--offwhite); }
+.sidebar-link.active { background: var(--lime); color: var(--ink); }
+
+.sidebar-promo {
+  margin: 20px 16px 20px;
+  margin-top: auto;
+  padding: 18px;
+  border-radius: var(--r-card);
+  background: var(--card-dark);
+  border: 1px solid var(--card-dark-border);
+}
+
+/* content area next to the sidebar — gated so it's a no-op below the
+   desktop breakpoint even if used outside an .only-desktop wrapper */
+@media (min-width: 1024px) {
+  .with-sidebar {
+    margin-left: var(--sidebar-w);
+  }
 }

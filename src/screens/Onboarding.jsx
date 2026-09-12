@@ -39,29 +39,31 @@ export default function Onboarding() {
 
       <div style={{
         position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column',
-        justifyContent: 'flex-end', padding: '32px 28px 40px', gap: 26,
+        justifyContent: 'flex-end', alignItems: 'center', padding: '32px 28px 40px',
       }}>
-        <div key={step} className="animate-fade-slide" style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 420 }}>
-          <h1 style={{ fontSize: 30, color: 'var(--offwhite)', lineHeight: 1.15 }}>{s.heading}</h1>
-          <p style={{ fontSize: 15, lineHeight: 1.5, color: 'var(--off-70)' }}>{s.body}</p>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-          <div style={{ display: 'flex', gap: 8 }}>
-            {STEPS.map((_, i) => (
-              <div key={i} style={{
-                width: i === step ? 22 : 6, height: 6, borderRadius: 'var(--r-pill)',
-                background: i === step ? 'var(--lime)' : 'var(--off-30)', transition: 'width 0.2s',
-              }} />
-            ))}
+        <div style={{ width: '100%', maxWidth: 440, display: 'flex', flexDirection: 'column', gap: 26 }}>
+          <div key={step} className="animate-fade-slide" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <h1 style={{ fontSize: 30, color: 'var(--offwhite)', lineHeight: 1.15 }}>{s.heading}</h1>
+            <p style={{ fontSize: 15, lineHeight: 1.5, color: 'var(--off-70)' }}>{s.body}</p>
           </div>
-          <button
-            className="btn btn-lime"
-            style={{ width: '100%', height: 56 }}
-            onClick={() => (isLast ? navigate('/sign-in') : setStep(step + 1))}
-          >
-            {isLast ? 'Get Started' : 'Next'} <span aria-hidden="true">→</span>
-          </button>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {STEPS.map((_, i) => (
+                <div key={i} style={{
+                  width: i === step ? 22 : 6, height: 6, borderRadius: 'var(--r-pill)',
+                  background: i === step ? 'var(--lime)' : 'var(--off-30)', transition: 'width 0.2s',
+                }} />
+              ))}
+            </div>
+            <button
+              className="btn btn-lime"
+              style={{ width: '100%', height: 56 }}
+              onClick={() => (isLast ? navigate('/sign-in') : setStep(step + 1))}
+            >
+              {isLast ? 'Get Started' : 'Next'} <span aria-hidden="true">→</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

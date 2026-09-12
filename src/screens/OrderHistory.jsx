@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Sidebar from '../components/Sidebar.jsx';
 import BottomNav from '../components/BottomNav.jsx';
 
 import heroBowl from '../assets/images/hero-bowl.jpg';
@@ -44,7 +45,8 @@ export default function OrderHistory() {
 
   return (
     <div className="page-dark" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 20px 100px', display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <Sidebar />
+      <div className="with-sidebar" style={{ maxWidth: 700, padding: '20px 20px 100px', display: 'flex', flexDirection: 'column', gap: 18 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link to="/profile" className="card-dark" style={{ width: 38, height: 38, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--offwhite)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 5l-7 7 7 7" /></svg>

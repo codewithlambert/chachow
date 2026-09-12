@@ -24,7 +24,7 @@
   font-weight: 600;
 }
 .browse-sidebar-link.active { background: var(--lime); color: var(--ink); }
-.browse-sidebar-link:not(.active) { color: var(--ink-70); }
+.browse-sidebar-link:not(.active) { color: var(--off-70); }
 
 .browse-grid {
   flex: 1;
@@ -34,10 +34,8 @@
 }
 
 .rest-card {
-  background: var(--white);
   border-radius: var(--r-card);
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(15, 17, 16, 0.06);
   display: block;
 }
 

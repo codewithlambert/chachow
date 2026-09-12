@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import TopNav from '../components/TopNav.jsx';
+import Sidebar from '../components/Sidebar.jsx';
 import './OrderTracking.css';
 import heroBowl from '../assets/images/hero-bowl.jpg';
 
@@ -63,20 +63,20 @@ export default function OrderTracking() {
   return (
     <>
       {/* ---------------- DESKTOP ---------------- */}
-      <div className="only-desktop page-light">
-        <TopNav />
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 40px 60px' }}>
-          <h1 style={{ fontSize: 24 }}>Your order is on the way!</h1>
-          <span style={{ fontSize: 13, color: 'var(--ink-45)' }}>Arriving in 12 mins · #CC3487</span>
+      <div className="only-desktop page-dark">
+        <Sidebar />
+        <div className="with-sidebar" style={{ maxWidth: 1200, padding: '32px 40px 60px' }}>
+          <h1 style={{ fontSize: 24, color: 'var(--offwhite)' }}>Your order is on the way!</h1>
+          <span style={{ fontSize: 13, color: 'var(--off-45)' }}>Arriving in 12 mins · #CC3487</span>
 
           <div className="track-hstep-row" style={{ margin: '28px 0 6px' }}>
-            <div className="track-hstep-line" />
+            <div className="track-hstep-line" style={{ background: 'var(--off-08)' }} />
             <div className="track-hstep-line-done" style={{ width: '62%' }} />
             {STEPS.map((s) => (
               <div key={s.label} style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 1 }}>
-                <div style={{ width: 26, height: 26, borderRadius: 999, background: s.done ? 'var(--lime)' : 'var(--white)', border: s.done ? 'none' : '2px solid var(--ink-12)' }} />
-                <span style={{ fontSize: 12, fontWeight: s.current ? 700 : 500, color: s.done ? 'var(--ink)' : 'var(--ink-30)' }}>{s.label}</span>
-                <span style={{ fontSize: 11, color: 'var(--ink-30)' }}>{s.time}</span>
+                <div style={{ width: 26, height: 26, borderRadius: 999, background: s.done ? 'var(--lime)' : 'transparent', border: s.done ? 'none' : '2px solid var(--off-14)' }} />
+                <span style={{ fontSize: 12, fontWeight: s.current ? 700 : 500, color: s.done ? 'var(--offwhite)' : 'var(--off-30)' }}>{s.label}</span>
+                <span style={{ fontSize: 11, color: 'var(--off-30)' }}>{s.time}</span>
               </div>
             ))}
           </div>
@@ -84,28 +84,28 @@ export default function OrderTracking() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 32, marginTop: 28 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <MapCard height={340} />
-              <RiderRow />
+              <RiderRow dark />
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--white)', borderRadius: 'var(--r-card-sm)', padding: 12 }}>
+              <div className="card-dark" style={{ display: 'flex', alignItems: 'center', gap: 12, borderRadius: 'var(--r-card-sm)', padding: 12 }}>
                 <div style={{ width: 46, height: 46, borderRadius: 12, overflow: 'hidden', flexShrink: 0 }}><img src={heroBowl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 700 }}>Jollof Rice &amp; Grilled Chicken</div>
-                  <div style={{ fontSize: 12, color: 'var(--ink-45)' }}>+2 items · ₦10,600</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--offwhite)' }}>Jollof Rice &amp; Grilled Chicken</div>
+                  <div style={{ fontSize: 12, color: 'var(--off-45)' }}>+2 items · ₦10,600</div>
                 </div>
               </div>
 
               <div>
-                <h3 style={{ fontSize: 14, marginBottom: 10 }}>Live updates</h3>
+                <h3 style={{ fontSize: 14, marginBottom: 10, color: 'var(--offwhite)' }}>Live updates</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                   {LIVE_UPDATES.map((u) => (
                     <div key={u.label} style={{ display: 'flex', gap: 10 }}>
                       <div style={{ width: 6, height: 6, borderRadius: 999, background: 'var(--lime)', marginTop: 6, flexShrink: 0 }} />
                       <div>
-                        <div style={{ fontSize: 13, fontWeight: 700 }}>{u.label}</div>
-                        <div style={{ fontSize: 12, color: 'var(--ink-45)' }}>{u.sub}</div>
-                        <div style={{ fontSize: 11, color: 'var(--ink-30)' }}>{u.time}</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--offwhite)' }}>{u.label}</div>
+                        <div style={{ fontSize: 12, color: 'var(--off-45)' }}>{u.sub}</div>
+                        <div style={{ fontSize: 11, color: 'var(--off-30)' }}>{u.time}</div>
                       </div>
                     </div>
                   ))}

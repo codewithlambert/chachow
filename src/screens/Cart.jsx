@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import TopNav from '../components/TopNav.jsx';
+import Sidebar from '../components/Sidebar.jsx';
 
 import heroBowl from '../assets/images/hero-bowl.jpg';
 import skewers from '../assets/images/skewers.jpg';
@@ -73,16 +73,16 @@ export default function Cart() {
   return (
     <>
       {/* ---------------- DESKTOP ---------------- */}
-      <div className="only-desktop page-light">
-        <TopNav />
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 40px 60px' }}>
-          <h1 style={{ fontSize: 24 }}>Your Cart</h1>
-          <span style={{ fontSize: 13, color: 'var(--ink-45)' }}>{items.length} items</span>
+      <div className="only-desktop page-dark">
+        <Sidebar />
+        <div className="with-sidebar" style={{ maxWidth: 1100, padding: '32px 40px 60px' }}>
+          <h1 style={{ fontSize: 24, color: 'var(--offwhite)' }}>Your Cart</h1>
+          <span style={{ fontSize: 13, color: 'var(--off-45)' }}>{items.length} items</span>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 32, marginTop: 20 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {items.map((it, i) => (
-                <ItemRow key={it.name} item={it} onQty={(d) => changeQty(i, d)} onRemove={() => remove(i)} />
+                <ItemRow key={it.name} item={it} onQty={(d) => changeQty(i, d)} onRemove={() => remove(i)} dark />
               ))}
 
               <div style={{ display: 'flex', gap: 32, marginTop: 20 }}>
@@ -92,7 +92,7 @@ export default function Cart() {
               </div>
             </div>
 
-            <SummaryCard subtotal={subtotal} onCheckout={() => navigate('/tracking')} />
+            <SummaryCard subtotal={subtotal} onCheckout={() => navigate('/tracking')} dark />
           </div>
         </div>
       </div>
@@ -120,8 +120,8 @@ export default function Cart() {
 function TrustItem({ label, sub }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <span style={{ fontSize: 13, fontWeight: 700 }}>{label}</span>
-      <span style={{ fontSize: 11, color: 'var(--ink-45)' }}>{sub}</span>
+      <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--offwhite)' }}>{label}</span>
+      <span style={{ fontSize: 11, color: 'var(--off-45)' }}>{sub}</span>
     </div>
   );
 }

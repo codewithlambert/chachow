@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import TopNav from '../components/TopNav.jsx';
+import Sidebar from '../components/Sidebar.jsx';
 import BottomNav from '../components/BottomNav.jsx';
 import { useAuth } from '../auth.jsx';
 
@@ -8,8 +8,6 @@ import heroBowl from '../assets/images/hero-bowl.jpg';
 import skewers from '../assets/images/skewers.jpg';
 import pizza from '../assets/images/pizza.jpg';
 import dessert from '../assets/images/dessert.jpg';
-
-const MENU = ['My Orders', 'Addresses', 'Payment Methods', 'Promo Codes', 'Help & Support', 'Settings'];
 
 // Mobile menu rows — a subset link somewhere (My Orders/Addresses/Payment
 // Methods have dedicated screens), the rest are inert like "About" on TopNav.
@@ -35,68 +33,52 @@ const MENU_ICON = (
 
 export default function Profile() {
   const [tab, setTab] = useState('All');
-  const { logout } = useAuth();
+  const { logout, isGuest, name } = useAuth();
   const navigate = useNavigate();
+  const displayName = isGuest ? 'Guest' : name;
+  const displayPhone = isGuest ? 'Sign in to add a phone number' : '+234 812 345 6789';
 
   return (
     <>
       {/* ---------------- DESKTOP ---------------- */}
-      <div className="only-desktop page-light">
-        <TopNav />
-        <div style={{ display: 'flex', gap: 40, maxWidth: 1200, margin: '0 auto', padding: 40 }}>
-          <div style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 52, height: 52, borderRadius: 999, background: 'var(--lime)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: 'var(--ink)' }}>S</span>
-              </div>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 700 }}>Samuel</div>
-                <div style={{ fontSize: 12, color: 'var(--ink-45)' }}>+234 812 345 6789</div>
-              </div>
+      <div className="only-desktop page-dark">
+        <Sidebar />
+        <div className="with-sidebar" style={{ maxWidth: 900, padding: 40 }}>
+          <div className="card-dark" style={{ display: 'flex', alignItems: 'center', gap: 14, borderRadius: 'var(--r-card)', padding: 18, marginBottom: 28 }}>
+            <div style={{ width: 56, height: 56, borderRadius: 999, background: 'var(--lime)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 20, color: 'var(--ink)' }}>{displayName[0]}</span>
             </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {MENU.map((m, i) => (
-                <div key={m} style={{
-                  padding: '10px 14px', borderRadius: 14, fontSize: 14, fontWeight: 600,
-                  background: i === 0 ? 'var(--lime)' : 'transparent', color: i === 0 ? 'var(--ink)' : 'var(--ink-70)',
-                }}>
-                  {m}
-                </div>
-              ))}
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--offwhite)' }}>{displayName}</div>
+              <div style={{ fontSize: 13, color: 'var(--off-45)' }}>{displayPhone}</div>
             </div>
-
-            <button onClick={() => { logout(); navigate('/'); }} className="btn btn-outline-light" style={{ height: 44, marginTop: 8 }}>
-              Log Out
-            </button>
+            <button className="btn btn-outline-dark" style={{ height: 38, padding: '0 18px', fontSize: 13 }}>Edit Profile</button>
           </div>
 
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
-              <h2 style={{ fontSize: 22 }}>My Orders</h2>
-              <div style={{ display: 'flex', gap: 8 }}>
-                {['All', 'Ongoing', 'Completed', 'Cancelled'].map((t) => (
-                  <button key={t} className={`chip${tab === t ? ' active' : ''}`} onClick={() => setTab(t)}>{t}</button>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {ORDERS.map((o) => (
-                <div key={o.name} style={{ display: 'flex', alignItems: 'center', gap: 14, background: 'var(--white)', borderRadius: 'var(--r-card-sm)', padding: 12 }}>
-                  <div style={{ width: 54, height: 54, borderRadius: 14, overflow: 'hidden', flexShrink: 0 }}>
-                    <img src={o.img} alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700 }}>{o.name}</div>
-                    <div style={{ fontSize: 12, color: 'var(--ink-45)' }}>{o.restaurant} · {o.date}</div>
-                  </div>
-                  <span style={{ fontSize: 13, fontWeight: 700 }}>{o.price}</span>
-                  <span className="badge-lime">Delivered</span>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--lime-dim)' }}>View Details</span>
-                </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+            <h2 style={{ fontSize: 22, color: 'var(--offwhite)' }}>My Orders</h2>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {['All', 'Ongoing', 'Completed', 'Cancelled'].map((t) => (
+                <button key={t} className={`chip${tab === t ? ' active' : ' chip-dark'}`} onClick={() => setTab(t)}>{t}</button>
               ))}
             </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {ORDERS.map((o) => (
+              <div key={o.name} className="card-dark" style={{ display: 'flex', alignItems: 'center', gap: 14, borderRadius: 'var(--r-card-sm)', padding: 12 }}>
+                <div style={{ width: 54, height: 54, borderRadius: 14, overflow: 'hidden', flexShrink: 0 }}>
+                  <img src={o.img} alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--offwhite)' }}>{o.name}</div>
+                  <div style={{ fontSize: 12, color: 'var(--off-45)' }}>{o.restaurant} · {o.date}</div>
+                </div>
+                <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--offwhite)' }}>{o.price}</span>
+                <span className="badge-lime">Delivered</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--lime-dim)' }}>View Details</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -109,11 +91,11 @@ export default function Profile() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ width: 52, height: 52, borderRadius: 999, background: 'var(--lime)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: 'var(--ink)' }}>S</span>
+                <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: 'var(--ink)' }}>{displayName[0]}</span>
               </div>
               <div>
-                <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--offwhite)' }}>Samuel</div>
-                <div style={{ fontSize: 12, color: 'var(--off-45)' }}>+234 812 345 6789</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--offwhite)' }}>{displayName}</div>
+                <div style={{ fontSize: 12, color: 'var(--off-45)' }}>{displayPhone}</div>
                 <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--lime-dim)' }}>Edit Profile ›</span>
               </div>
             </div>

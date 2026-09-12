@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import TopNav from '../components/TopNav.jsx';
+import Sidebar from '../components/Sidebar.jsx';
 import BottomNav from '../components/BottomNav.jsx';
 import './CategoryBrowse.css';
 
@@ -89,11 +89,11 @@ export default function CategoryBrowse() {
   return (
     <>
       {/* ---------------- DESKTOP ---------------- */}
-      <div className="only-desktop page-light">
-        <TopNav />
-        <div className="browse-body">
+      <div className="only-desktop page-dark">
+        <Sidebar />
+        <div className="with-sidebar browse-body">
           <div className="browse-sidebar">
-            <h3 style={{ fontSize: 15, marginBottom: 4 }}>Categories</h3>
+            <h3 style={{ fontSize: 15, marginBottom: 4, color: 'var(--offwhite)' }}>Categories</h3>
             {SIDEBAR_CATS.map((c) => (
               <div key={c.label} className={`browse-sidebar-link${c.active ? ' active' : ''}`}>
                 <span>{c.label}</span>
@@ -105,26 +105,26 @@ export default function CategoryBrowse() {
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 22 }}>
               <div>
-                <h2 style={{ fontSize: 22 }}>All Restaurants</h2>
-                <span style={{ fontSize: 13, color: 'var(--ink-45)' }}>128 restaurants</span>
+                <h2 style={{ fontSize: 22, color: 'var(--offwhite)' }}>All Restaurants</h2>
+                <span style={{ fontSize: 13, color: 'var(--off-45)' }}>128 restaurants</span>
               </div>
-              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-55)' }}>Sort by: Popular ▾</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--off-55)' }}>Sort by: Popular ▾</span>
             </div>
 
             <div className="browse-grid">
               {RESTAURANTS.map((r) => (
-                <Link to="/dish" key={r.name} className="rest-card" state={{ dish: restaurantToDish(r) }}>
+                <Link to="/dish" key={r.name} className="rest-card card-dark" state={{ dish: restaurantToDish(r) }}>
                   <div className="rest-card-photo">
                     <img src={r.img} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <span style={{ position: 'absolute', top: 10, right: 10, width: 30, height: 30, borderRadius: 'var(--r-pill)', background: 'rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20s-7.5-4.6-9.8-9.1C.6 7.6 2.3 4 5.8 4c2 0 3.4 1 4.2 2.4C10.8 5 12.2 4 14.2 4c3.5 0 5.2 3.6 3.6 6.9C15.5 15.4 12 20 12 20z" /></svg>
+                    <span style={{ position: 'absolute', top: 10, right: 10, width: 30, height: 30, borderRadius: 'var(--r-pill)', background: 'rgba(15,17,16,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--offwhite)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20s-7.5-4.6-9.8-9.1C.6 7.6 2.3 4 5.8 4c2 0 3.4 1 4.2 2.4C10.8 5 12.2 4 14.2 4c3.5 0 5.2 3.6 3.6 6.9C15.5 15.4 12 20 12 20z" /></svg>
                     </span>
                   </div>
                   <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
                     <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--lime-dim)' }}>★ {r.rating} ({r.reviews} reviews)</span>
-                    <span style={{ fontSize: 14, fontWeight: 700 }}>{r.name}</span>
-                    <span style={{ fontSize: 12, color: 'var(--ink-45)' }}>{r.tags}</span>
-                    <span style={{ fontSize: 12, color: 'var(--ink-45)' }}>₦{r.price.toLocaleString()} · {r.time}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--offwhite)' }}>{r.name}</span>
+                    <span style={{ fontSize: 12, color: 'var(--off-45)' }}>{r.tags}</span>
+                    <span style={{ fontSize: 12, color: 'var(--off-45)' }}>₦{r.price.toLocaleString()} · {r.time}</span>
                     <span className="badge-lime" style={{ width: 'fit-content' }}>Open</span>
                   </div>
                 </Link>
