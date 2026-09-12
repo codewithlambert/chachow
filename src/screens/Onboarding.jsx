@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { useIsMobile } from '../useIsMobile.js';
 import bowlImg from '../assets/images/hero-bowl.jpg';
 import burgerImg from '../assets/images/burger.jpg';
 import noodlesImg from '../assets/images/noodles.jpg';
@@ -10,11 +11,16 @@ const STEPS = [
   { img: noodlesImg, heading: 'Your cravings. Our priority.', body: 'From solo meals to family feasts, Cha Chow has something for everyone.' },
 ];
 
+// Splash → Onboarding is a mobile-only sequence; desktop visitors (who reach
+// this via the landing page's Sign Up button) skip straight to Sign In.
 export default function Onboarding() {
   const [step, setStep] = useState(0);
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const s = STEPS[step];
   const isLast = step === STEPS.length - 1;
+
+  if (!isMobile) return <Navigate to="/sign-in" replace />;
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', background: 'var(--ink)', overflow: 'hidden' }}>
