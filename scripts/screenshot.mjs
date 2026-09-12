@@ -8,8 +8,14 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const routes = [
   { path: '/', name: 'home' },
+  { path: '/splash', name: 'splash' },
+  { path: '/onboarding', name: 'onboarding' },
+  { path: '/sign-in', name: 'sign-in' },
+  { path: '/browse', name: 'browse' },
   { path: '/dish', name: 'dish-detail' },
-  { path: '/tracking', name: 'order-tracking' },
+  { path: '/cart', name: 'cart' },
+  { path: '/tracking', name: 'tracking' },
+  { path: '/profile', name: 'profile' },
 ];
 
 const viewports = [
@@ -18,6 +24,7 @@ const viewports = [
 ];
 
 const browser = await chromium.launch();
+let anyErrors = false;
 
 for (const vp of viewports) {
   const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
@@ -27,15 +34,18 @@ for (const vp of viewports) {
 
   for (const r of routes) {
     await page.goto(BASE + r.path, { waitUntil: 'networkidle' });
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(250);
     const file = path.join(OUT, `${r.name}-${vp.name}.png`);
-    await page.screenshot({ path: file, fullPage: vp.name === 'desktop' ? false : true });
+    await page.screenshot({ path: file, fullPage: true });
     console.log('shot:', vp.name, r.path, '->', file);
   }
 
-  if (errors.length) console.log(`console errors (${vp.name}):`, errors);
+  if (errors.length) {
+    anyErrors = true;
+    console.log(`console errors (${vp.name}):`, errors);
+  }
   await page.close();
 }
 
 await browser.close();
-console.log('done');
+console.log(anyErrors ? 'done (with console errors — see above)' : 'done, no console errors');

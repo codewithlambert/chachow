@@ -1,7 +1,9 @@
 # Cha Chow
 
-Food delivery web app, built with React + Vite. Responsive: one real
-codebase serving both mobile and desktop, not a phone mockup.
+Food delivery web app for the Nigerian market (Lagos), built with React +
+Vite. One responsive codebase — desktop gets a marketing landing page +
+top nav, mobile gets the native-app-style flow (Splash → Onboarding →
+Sign In → dashboard with a bottom tab bar).
 
 ## Design system
 
@@ -9,60 +11,63 @@ codebase serving both mobile and desktop, not a phone mockup.
 |---|---|---|
 | `--lime` | `#C9F53A` | the only accent — active states, prices, CTAs |
 | `--lime-dim` | `#7fae1c` | lime, darkened for legible text on light backgrounds |
-| `--ink` | `#0F1110` | near-black — headers, nav, primary buttons |
-| `--offwhite` | `#F8F9F5` | screen surface |
-| `--white` | `#FFFFFF` | cards, sheets |
+| `--ink` | `#0F1110` | near-black — the authenticated app's surface, nav, primary buttons |
+| `--offwhite` | `#F8F9F5` | light surface (desktop app pages, Sign In) |
+| `--card-dark` | `rgba(248,249,245,0.045)` | card surface on dark (mobile app) screens |
 
 All defined in `src/index.css`. Headings use **Space Grotesk** (bold, tight
-tracking); body text uses **DM Sans**. Cards are 24–32px radius; buttons and
-chips are pill-shaped. No colors outside this system appear anywhere except
-inside the food photography itself.
+tracking); body text uses **DM Sans**. Cards are 20–32px radius; buttons
+and chips are pill-shaped.
 
-## Responsive architecture
-
-`App.jsx` renders one shell for every route:
+## Routing & auth
 
 ```
-.app-shell
-├── Sidebar          desktop-only nav rail (≥768px), fixed left, 240px
-└── .main-content    routed screen, margin-left: 240px on desktop
-    └── BottomNav    mobile-only tab bar (<768px), fixed bottom
+/                 public marketing home (desktop) — redirects mobile
+                  first-time visitors into /splash
+/splash /onboarding /sign-in     public, pre-auth flow
+
+--- everything below requires a signed-in session (see src/auth.jsx) ---
+/browse           category / restaurant browse
+/dish             dish detail (reads the tapped dish from router state,
+                  falls back to a default if opened directly)
+/cart
+/tracking         live order tracking
+/profile          account menu (mobile) / orders list (desktop)
+/orders           order history — Current / Past tabs
+/addresses
+/payment-methods
 ```
 
-`Sidebar` and `BottomNav` read from the same `src/components/navTabs.jsx` so
-the two never drift out of sync — one is shown, the other hidden, by CSS
-media query (`--bp-desktop: 768px` in `src/index.css`), not by JS viewport
-detection. Each screen is a normal in-flow page inside `.page`
-(`max-width: 1160px`, centered) that reflows at its own breakpoints:
+`src/auth.jsx` is a small demo-only auth context (no backend) — `login()`
+flips a flag persisted to `localStorage` so a refresh mid-session doesn't
+bounce you back to Sign In. **Sign In → "Continue as guest"** logs in
+without needing real credentials, for testing.
 
-- **Home** — header row stacks on mobile, goes side-by-side (info left,
-  search right) on desktop; dish grid goes 2 → 3 → 4 columns.
-- **Dish Detail** — stacked photo-over-sheet on mobile (with the fixed
-  bottom "Add to Cart") becomes a sticky-photo-left / scrolling-info-right
-  two-column layout on desktop, where the CTA is just a normal in-flow
-  button.
-- **Order Tracking** — map-then-steps stack on mobile; side-by-side columns
-  on desktop.
+Desktop vs. mobile is decided per-screen by two things working together:
+CSS (`--bp-desktop: 1024px` in `src/index.css`, via the `.only-desktop` /
+`.only-mobile` utility classes) picks which block renders, and
+`src/useIsMobile.js` is used the one place routing itself needs to know
+(`Home.jsx`, to redirect first-time mobile visitors to `/splash`).
 
-Resize the browser — nothing here is device-specific markup, it's the same
-DOM reflowing.
+**Known gap:** `/orders`, `/addresses`, `/payment-methods` were built
+mobile-first per the reference and don't have a distinct desktop layout
+yet — they render fine on desktop, just centered/narrow rather than using
+the extra width.
 
 ## Screens
 
-- `src/screens/Home.jsx` — black rounded header block with a lime radial
-  glow, address dropdown, white pill search, category chips, responsive dish
-  grid. Cards link to Dish Detail.
-- `src/screens/DishDetail.jsx` — hero photo, lime price pill, outlined
-  add-on checkboxes, "Add to Cart".
-- `src/screens/OrderTracking.jsx` — dark rounded map card with a lime route
-  and courier marker, vertical progress list.
-- `src/components/Logo.jsx` — the `cha chow` wordmark + bowl/chopsticks mark.
-- `src/components/Sidebar.jsx` / `src/components/BottomNav.jsx` — the two
-  responsive nav chrome components described above.
-
-More screens (Splash, Onboarding, Sign In, Category Browse, Cart, Profile)
-aren't wired up as routes yet — say the word and they're a fast follow using
-the same tokens, shell, and breakpoints.
+- `Splash` / `Onboarding` (3 steps, animated) / `SignIn` — pre-auth flow.
+- `Home` — desktop: full-bleed photo hero, Popular Categories, How It
+  Works. Mobile: signed-in dashboard (greeting, search, deals, categories,
+  popular dishes).
+- `CategoryBrowse` — desktop: sidebar filter + restaurant grid. Mobile:
+  category list.
+- `DishDetail` — hero photo, add-ons, quantity, Add to Cart.
+- `Cart`, `OrderTracking`, `Profile`, `OrderHistory`, `Addresses`,
+  `PaymentMethods`.
+- `src/components/Logo.jsx` — the `Cha Chow` wordmark.
+- `src/components/TopNav.jsx` (desktop) / `BottomNav.jsx` (mobile) — chrome
+  for the authenticated app; both read live auth state.
 
 ## Run it
 
@@ -71,25 +76,25 @@ npm install
 npm run dev       # http://localhost:5173
 ```
 
-Real in-app navigation: the sidebar (desktop) / bottom tabs (mobile) link
-Home ↔ Order Tracking, and dish cards on Home link to Dish Detail.
-
-## Screenshot script
-
-`scripts/screenshot.mjs` drives the dev server with Playwright and saves a
-mobile (390px) and desktop (1440px) PNG of each route to `.screenshots/` —
-useful for checking a responsive change without opening a browser:
+## Screenshot scripts
 
 ```bash
 npm run dev &
-node scripts/screenshot.mjs
+node scripts/screenshot.mjs   # every route, mobile + desktop, to .screenshots/
+node scripts/full-sweep.mjs   # same, but signs in first so it also covers
+                               # every gated route
 ```
+
+## Deploying (Vercel)
+
+`vercel.json` rewrites every path to `index.html` so client-side routing
+(React Router) survives a hard refresh or a direct link to e.g. `/cart`.
+Push to GitHub and import the repo in Vercel — no other config needed
+(Vite is auto-detected).
 
 ## Food photography
 
-The current images (`src/assets/images/`) are stock photography, used as
-realistic placeholders. The target look for real shoots: dish on matte black
-ceramic, light warm-grey seamless backdrop, soft directional daylight, a
-slight top-down angle, crisp texture, no competing props, with room around
-the subject for a square crop. Swap files in `src/assets/images/` (same
-filenames) once real photography is ready — nothing else needs to change.
+Stock photography in `src/assets/images/`, used as realistic placeholders,
+matched to what they're labeled as (grilled chicken for "Chicken", pasta
+for "Pasta", grilled skewers for "Beef Suya", etc.). Swap files for real
+shoots later — same filenames, nothing else needs to change.

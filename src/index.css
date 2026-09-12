@@ -1,6 +1,13 @@
+/* ============================================================
+   Cha Chow — locked design system
+   Base #0F1110 · Accent (only) #C9F53A · Surface #F8F9F5
+   Headings: Space Grotesk (bold, tight) · Body: DM Sans
+   Cards: 24–32px radius · Buttons: pill only · No sharp corners
+   ============================================================ */
+
 :root {
   --lime: #C9F53A;
-  --lime-dim: #7fae1c; /* darkened lime, for text that needs contrast on light bg */
+  --lime-dim: #7fae1c; /* darkened lime — text-on-light legibility only, same hue */
   --ink: #0F1110;
   --offwhite: #F8F9F5;
   --white: #FFFFFF;
@@ -15,28 +22,30 @@
 
   --off-70: rgba(248, 249, 245, 0.7);
   --off-55: rgba(248, 249, 245, 0.55);
+  --off-45: rgba(248, 249, 245, 0.45);
   --off-30: rgba(248, 249, 245, 0.3);
+  --off-14: rgba(248, 249, 245, 0.14);
+  --off-08: rgba(248, 249, 245, 0.08);
+  --off-05: rgba(248, 249, 245, 0.05);
+
+  --card-dark: rgba(248, 249, 245, 0.045);
+  --card-dark-border: rgba(248, 249, 245, 0.08);
 
   --font-heading: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
 
-  --r-card: 28px;
-  --r-card-lg: 32px;
+  --r-card: 28px;   /* 24-32px range */
+  --r-card-sm: 20px;
   --r-pill: 999px;
 
-  --sidebar-w: 240px;
-  --bp-desktop: 768px;
+  --nav-h: 76px;
+  --bp-desktop: 1024px;
 
   color-scheme: light;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html, body, #root {
-  min-height: 100%;
-}
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; }
 
 body {
   margin: 0;
@@ -44,6 +53,7 @@ body {
   font-family: var(--font-body);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 h1, h2, h3, h4 {
@@ -52,10 +62,7 @@ h1, h2, h3, h4 {
   letter-spacing: -0.02em;
   margin: 0;
 }
-
-p, span {
-  margin: 0;
-}
+p, span { margin: 0; }
 
 button {
   font-family: inherit;
@@ -64,140 +71,115 @@ button {
   cursor: pointer;
   padding: 0;
 }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+input { font-family: inherit; }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; }
+
+@keyframes fade-slide-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-slide { animation: fade-slide-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade { animation: fade-in 0.5s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-slide, .animate-fade { animation: none; }
 }
 
-img {
-  display: block;
-  max-width: 100%;
+/* responsive-variant toggles: every screen renders both blocks,
+   CSS shows the right one at the breakpoint (no separate routes) */
+.only-desktop { display: none; }
+.only-mobile { display: block; }
+@media (min-width: 1024px) {
+  .only-desktop { display: block; }
+  .only-mobile { display: none; }
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+/* ---------- shared button/pill primitives ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 26px;
+  border-radius: var(--r-pill);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
 }
-.hide-scrollbar {
-  scrollbar-width: none;
+.btn-lime { background: var(--lime); color: var(--ink); }
+.btn-lime:hover { filter: brightness(1.05); }
+.btn { transition: transform 0.15s ease; }
+.btn:active { transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .btn:active { transform: none; }
+}
+.btn-outline-dark { background: transparent; color: var(--offwhite); border: 1.5px solid var(--off-30); }
+.btn-outline-dark:hover { border-color: var(--offwhite); }
+.btn-outline-light { background: transparent; color: var(--ink); border: 1.5px solid var(--ink-12); }
+.btn-outline-light:hover { border-color: var(--ink-30); }
+.btn:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.chip.active { background: var(--ink); color: var(--lime); }
+.chip:not(.active) { background: var(--ink-05); color: var(--ink-70); }
+.chip-dark:not(.active) { background: var(--off-08); color: var(--off-70); }
+
+/* dark card — the mobile authenticated-app surface (Home dashboard,
+   Browse, Dish Detail, Tracking, Profile all live on --ink, not
+   --offwhite; desktop keeps the light surface from the desktop mock) */
+.card-dark {
+  background: var(--card-dark);
+  border: 1px solid var(--card-dark-border);
 }
 
-/* ---------- app shell: sidebar (desktop) + bottom nav (mobile) ---------- */
+.badge-lime {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: var(--lime);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+}
 
-.app-shell {
-  display: flex;
-  min-height: 100vh;
+/* ---------- page shells ---------- */
+
+/* NOTE: min-height:100% resolves against the viewport on a position:fixed
+   element, silently turning it into a full-screen overlay. Never put this
+   class on a fixed element — set `background: var(--ink)` inline instead. */
+.page-dark {
+  min-height: 100%;
+  background: var(--ink);
+}
+.page-light {
+  min-height: 100%;
   background: var(--offwhite);
 }
 
-.main-content {
-  flex: 1;
-  min-width: 0;
-  padding-bottom: 100px; /* clearance for the fixed mobile bottom nav */
-}
-
-@media (min-width: 768px) {
-  .main-content {
-    margin-left: var(--sidebar-w);
-    padding-bottom: 0;
-  }
-}
-
-.page {
-  max-width: 1160px;
+.container {
+  max-width: 1360px;
   margin: 0 auto;
-  padding: 18px 18px 28px;
+  padding: 0 20px;
 }
-
-@media (min-width: 768px) {
-  .page {
-    padding: 32px 40px 56px;
-  }
-}
-
-/* sidebar (desktop nav rail) */
-
-.sidebar {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .sidebar {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: var(--sidebar-w);
-    background: var(--ink);
-    padding: 24px 16px;
-    z-index: 30;
-  }
-}
-
-.sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 16px;
-  color: var(--off-55);
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.sidebar-link:hover {
-  background: rgba(248, 249, 245, 0.07);
-  color: var(--offwhite);
-}
-
-.sidebar-link.active {
-  background: var(--lime);
-  color: var(--ink);
-}
-
-/* bottom nav (mobile tab bar) */
-
-.bottom-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  height: 84px;
-  padding: 10px 16px 16px;
-  background: var(--ink);
-  border-radius: 28px 28px 0 0;
-}
-
-@media (min-width: 768px) {
-  .bottom-nav {
-    display: none;
-  }
-}
-
-/* sticky mobile CTA that becomes a normal in-flow button on desktop */
-
-.sticky-cta {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 20;
-  background: var(--white);
-  padding: 16px 24px 28px;
-}
-
-@media (min-width: 768px) {
-  .sticky-cta {
-    position: static;
-    background: transparent;
-    padding: 0;
-    margin-top: 28px;
-  }
+@media (min-width: 1024px) {
+  .container { padding: 0 40px; }
 }

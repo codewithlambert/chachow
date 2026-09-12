@@ -1,38 +1,42 @@
-.tracking-layout {
-  display: flex;
-  flex-direction: column;
-}
-
-.tracking-map {
+.track-map {
   position: relative;
-  margin-top: 20px;
-  height: 260px;
-  border-radius: var(--r-card-lg);
+  border-radius: var(--r-card);
   background: var(--ink);
   overflow: hidden;
 }
 
-@media (min-width: 768px) {
-  .tracking-layout {
-    flex-direction: row;
-    gap: 40px;
-    align-items: flex-start;
-    padding-top: 8px;
-  }
-
-  .tracking-map-col {
-    flex: 1 1 55%;
-    min-width: 0;
-  }
-
-  .tracking-steps-col {
-    flex: 1 1 45%;
-    min-width: 0;
-    padding-top: 8px;
-  }
-
-  .tracking-map {
-    margin-top: 0;
-    height: 380px;
-  }
+.track-hstep-row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
 }
+.track-hstep-line {
+  position: absolute;
+  top: 13px;
+  left: 26px;
+  right: 26px;
+  height: 2px;
+  background: var(--ink-08);
+}
+.track-hstep-line-done {
+  position: absolute;
+  top: 13px;
+  left: 26px;
+  height: 2px;
+  background: var(--lime);
+}
+
+.track-vstep-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.rider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: var(--r-card-sm);
+  padding: 14px;
+}
+.rider-row.light { background: var(--white); }
