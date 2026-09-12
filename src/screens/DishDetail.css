@@ -1,0 +1,54 @@
+.dish-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.dish-hero {
+  position: relative;
+  height: 280px;
+  border-radius: var(--r-card-lg);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.dish-sheet {
+  position: relative;
+  margin-top: -28px;
+  background: var(--white);
+  border-radius: 32px 32px 0 0;
+  padding: 26px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+@media (min-width: 768px) {
+  .dish-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 48px;
+  }
+
+  .dish-photo-col {
+    flex: 0 0 42%;
+    position: sticky;
+    top: 32px;
+  }
+
+  .dish-hero {
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .dish-info-col {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .dish-sheet {
+    margin-top: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+  }
+}
