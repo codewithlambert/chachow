@@ -193,6 +193,11 @@ input { font-family: inherit; }
 
 /* ---------- authenticated-app sidebar (desktop) ---------- */
 
+/* NOTE: no `display` here — this class always pairs with `only-desktop` in
+   markup, and an unconditional `display:flex` here would win the cascade
+   over `.only-desktop{display:none}` on mobile (same specificity, declared
+   later in the file). Desktop `display:flex` is set below, inside the
+   min-width media query, where it can't leak onto mobile. */
 .app-sidebar {
   position: fixed;
   top: 0;
@@ -200,7 +205,6 @@ input { font-family: inherit; }
   bottom: 0;
   width: var(--sidebar-w);
   background: var(--ink);
-  display: flex;
   flex-direction: column;
   z-index: 30;
   overflow-y: auto;
@@ -233,5 +237,8 @@ input { font-family: inherit; }
 @media (min-width: 1024px) {
   .with-sidebar {
     margin-left: var(--sidebar-w);
+  }
+  .app-sidebar {
+    display: flex;
   }
 }
